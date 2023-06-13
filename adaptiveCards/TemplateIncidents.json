@@ -1,0 +1,176 @@
+{
+    "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+    "actions": [
+        {
+            "data": {
+                "x": "confirm"
+            },
+            "title": "Submit response!",
+            "type": "Action.Submit"
+        }
+    ],
+    "body": [
+        {
+            "size": "Large",
+            "text": "@{triggerBody()?['object']?['properties']?['title']}",
+            "type": "TextBlock",
+            "weight": "Bolder",
+            "wrap": true
+        },
+        {
+            "text": "[Click here to view the Incident](@{triggerBody()?['object']?['properties']?['incidentUrl']})",
+            "type": "TextBlock",
+            "wrap": true
+        },
+        {
+            "facts": [
+                {
+                    "title": "ID",
+                    "value": "@{triggerBody()?['object']?['properties']?['incidentNumber']}"
+                },
+                {
+                    "title": "Creation time (UTC)",
+                    "value": "@{triggerBody()?['object']?['properties']?['createdTimeUtc']}"
+                },
+                {
+                    "title": "Severity",
+                    "value": "@{triggerBody()?['object']?['properties']?['severity']}"
+                },
+                {
+                    "title": "From",
+                    "value": "@{join(triggerBody()?['object']?['properties']?['additionalData']?['alertProductNames'],'; ')}"
+                }
+            ],
+            "spacing": "Padding",
+            "type": "FactSet"
+        },
+        {
+            "type": "RichTextBlock",
+            "inlines": [
+                {
+                    "type": "TextRun",
+                    "text": "[Add Entities here]"
+                }
+            ]
+        },
+        {
+            "text": "____________________________________________",
+            "type": "TextBlock",
+            "wrap": true
+        },
+        {
+            "size": "Large",
+            "spacing": "Large",
+            "text": "Respond:",
+            "type": "TextBlock",
+            "weight": "Bolder"
+        },
+        {
+            "horizontalAlignment": "Left",
+            "size": "Small",
+            "style": "Person",
+            "type": "Image",
+            "url": "https://connectoricons-prod.azureedge.net/releases/v1.0.1391/1.0.1391.2130/azuresentinel/icon.png"
+        },
+        {
+            "text": "Close Microsoft Sentinel incident?",
+            "type": "TextBlock"
+        },
+        {
+            "choices": [
+                {
+                    "isSelected": true,
+                    "title": "Close incident - False Positive",
+                    "value": "FalsePositive - IncorrectAlertLogic"
+                },
+                {
+                    "title": "Close incident - True Positive",
+                    "value": "TruePositive - SuspiciousActivity"
+                },
+                {
+                    "title": "Close incident - Benign Positive",
+                    "value": "BenignPositive - SuspiciousButExpected"
+                },
+                {
+                    "title": "Don't close the incident",
+                    "value": "no"
+                }
+            ],
+            "id": "incidentStatus",
+            "type": "Input.ChoiceSet",
+            "value": "no"
+        },
+        {
+            "text": "Change Microsoft Sentinel incident severity?",
+            "type": "TextBlock"
+        },
+        {
+            "choices": [
+                {
+                    "isSelected": true,
+                    "title": "High",
+                    "value": "High"
+                },
+                {
+                    "title": "Medium",
+                    "value": "Medium"
+                },
+                {
+                    "title": "Low",
+                    "value": "Low"
+                },
+                {
+                    "title": "Informational",
+                    "value": "Informational"
+                },
+                {
+                    "title": "Don't change",
+                    "value": "same"
+                }
+            ],
+            "id": "incidentSeverity",
+            "type": "Input.ChoiceSet",
+            "value": "same"
+        },
+        {
+            "text": "Reason for closing",
+            "type": "TextBlock",
+            "wrap": true
+        },
+        {
+            "id": "incidentclassificationComment",
+            "placeholder": "Placeholder text",
+            "type": "Input.Text"
+        },
+        {
+            "text": "____________________________________________",
+            "type": "TextBlock",
+            "wrap": true
+        },
+        {
+            "size": "Large",
+            "spacing": "Large",
+            "text": "Description and Tactics:",
+            "type": "TextBlock",
+            "weight": "Bolder"
+        },
+        {
+            "facts": [
+                {
+                    "title": "Description",
+                    "value": "@{triggerBody()?['object']?['properties']?['description']}"
+                },
+                {
+                    "title": "________________"
+                },
+                {
+                    "title": "Tactics",
+                    "value": "@{join(triggerBody()?['object']?['properties']?['additionalData']?['tactics'], '; ')}"
+                }
+            ],
+            "type": "FactSet"
+        }
+    ],
+    "type": "AdaptiveCard",
+    "version": "1.5"
+}
