@@ -6,6 +6,14 @@
                 "x": "confirm"
             },
             "title": "Submit response!",
+            "type": "Action.Submit",
+            "id": "1"
+        },
+        {
+            "data": {
+                "x": "ignore"
+            },
+            "title": "ignore",
             "type": "Action.Submit"
         }
     ],
@@ -79,7 +87,6 @@
         {
             "choices": [
                 {
-                    "isSelected": true,
                     "title": "Close incident - False Positive",
                     "value": "FalsePositive - IncorrectAlertLogic"
                 },
@@ -98,7 +105,8 @@
             ],
             "id": "incidentStatus",
             "type": "Input.ChoiceSet",
-            "value": "no"
+            "value": "no",
+            "label": "closeIncident"
         },
         {
             "text": "Change Microsoft Sentinel incident severity?",
@@ -125,22 +133,20 @@
                 },
                 {
                     "title": "Don't change",
-                    "value": "same"
+                    "value": "@{triggerBody()?['object']?['properties']?['severity']}"
                 }
             ],
             "id": "incidentSeverity",
             "type": "Input.ChoiceSet",
-            "value": "same"
-        },
-        {
-            "text": "Reason for closing",
-            "type": "TextBlock",
-            "wrap": true
+            "value": "@{triggerBody()?['object']?['properties']?['severity']}"
         },
         {
             "id": "incidentclassificationComment",
-            "placeholder": "Placeholder text",
-            "type": "Input.Text"
+            "placeholder": "Write closing reason",
+            "type": "Input.Text",
+            "label": "ClosingReason",
+            "isMultiline": true,
+            "maxLength": 250
         },
         {
             "text": "____________________________________________",
@@ -169,6 +175,11 @@
                 }
             ],
             "type": "FactSet"
+        },
+        {
+            "text": "Reason for closing",
+            "type": "TextBlock",
+            "wrap": true
         }
     ],
     "type": "AdaptiveCard",
