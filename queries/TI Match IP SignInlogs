@@ -1,0 +1,16 @@
+let ids = SecurityIncident
+| where Title == "TI Map IP Entity to SigninLogs"
+| project AlertIds;
+let IPs = SecurityAlert
+| where SystemAlertId in (ids)
+| extend Entities = parse_json(Entities)
+| project Entities
+| mv-expand Entities
+| extend EType = tostring(Entities.Type)
+| where EType == "ip"
+| extend IP = tostring(Entities.Address)
+| project IP;
+SigninLogs
+| where IPAddress in (IPs)
+| where ResultDescription != "Sign-in was blocked because it came from an IP address with malicious activity"
+
