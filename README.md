@@ -1,2 +1,2 @@
 # Sentinel
-This is a repository for Sentinel to reuse with cusomters
+This is a repository for Sentinel queries, logic apps and more
