@@ -1,0 +1,21 @@
+let ids = SecurityIncident
+| where Title == "A potentially malicious URL click was detected"
+| where Status == "New"
+| project AlertIds;
+let Urls = SecurityAlert
+| where SystemAlertId in (ids)
+| extend Entities = parse_json(Entities)
+| mv-expand Entities
+| extend EType = tostring(Entities.Type)
+| where EType == "url"
+| extend Url = tostring(Entities.Url)
+| project Url, tostring(SystemAlertId);
+SecurityIncident
+| where Title == "A potentially malicious URL click was detected"
+| where Status == "New"
+| extend sysAlrt = parse_json(AlertIds)
+| mv-expand sysAlrt
+| extend tostring(sysAlrt)
+| join kind=inner Urls on $left.sysAlrt == $right.SystemAlertId
+| project ProviderIncidentId, Url
+| distinct Url
